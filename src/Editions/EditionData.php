@@ -23,8 +23,8 @@ class EditionData extends Data
         #[MapInputName('Title')]
         public string $title,
 
-        #[MapInputName('Ean')]
-        public int $ean,
+        #[MapInputName('ean')]
+        public ?int $gtin,
 
         #[MapInputName('publishingHouse.name')]
         public string $publishingHouse,

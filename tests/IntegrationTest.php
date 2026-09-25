@@ -28,7 +28,7 @@ it('can fetch edition data correctly', function () {
     expect($edition->id)->toBe('1ca73850-96c2-4ac3-8b98-44d35c9378d1');
     expect($edition->legacyId)->toBeInt()->toBe(244940);
     expect($edition->title)->toBe('Murtuneet mielet');
-    expect($edition->ean)->toBeInt()->toBe(9789510374665);
+    expect($edition->gtin)->toBeInt()->toBe(9789510374665);
     expect($edition->bindingCode->id)->toBe('BB');
     expect($edition->bindingCode->name)->toBe('Hardback');
     expect($edition->bindingCode->onixCodelistValue)->toBe('BB');
