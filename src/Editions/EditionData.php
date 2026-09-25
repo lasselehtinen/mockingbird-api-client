@@ -85,7 +85,7 @@ class EditionData extends Data
 
         public ?int $stockBalance,
 
-        public string $technicalProductionTypeName,
+        public ?string $technicalProductionTypeName,
 
         #[MapInputName('vat')]
         public float $vatPercentage,
