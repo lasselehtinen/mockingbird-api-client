@@ -2,7 +2,6 @@
 
 namespace Lasselehtinen\MockingbirdApiClient\Editions;
 
-use Lasselehtinen\MockingbirdApiClient\Exceptions\UnsupportedPriceType;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;
 
