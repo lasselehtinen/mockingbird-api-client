@@ -72,7 +72,7 @@ class EditionData extends Data
         #[DataCollectionOf(LanguageData::class)]
         public DataCollection $originalLanguages,
 
-        public int $pages,
+        public ?int $pages,
 
         #[DataCollectionOf(PriceData::class)]
         public DataCollection $prices,
