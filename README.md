@@ -1,5 +1,3 @@
-# This is a cliexternal API
-
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/lasselehtinen/mockingbird-api-client.svg?style=flat-square)](https://packagist.org/packages/lasselehtinen/mockingbird-api-client)
 [![run-tests](https://github.com/lasselehtinen/mockingbird-api-client/actions/workflows/run-tests.yml/badge.svg)](https://github.com/lasselehtinen/mockingbird-api-client/actions/workflows/run-tests.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/lasselehtinen/mockingbird-api-client.svg?style=flat-square)](https://packagist.org/packages/lasselehtinen/mockingbird-api-client)
@@ -7,13 +5,6 @@
 # Mockingbird External API Client
 
 A Laravel API client for Mockingbird that provides OAuth authentication, strongly typed DTOs powered by Spatie Laravel Data, and convenient service classes for accessing editions, contributors, assets and other Mockingbird resources.
-
-The package is built on top of `spatie/laravel-webhook-client` and provides:
-
-- Webhook endpoint registration
-- Payload parsing
-- Event mapping
-- Laravel event dispatching
 
 ---
 
