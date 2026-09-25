@@ -1,0 +1,37 @@
+<?php
+
+namespace Lasselehtinen\MockingbirdApiClient\Editions;
+
+use Lasselehtinen\MockingbirdApiClient\Exceptions\UnsupportedPriceType;
+use Spatie\LaravelData\Attributes\MapInputName;
+use Spatie\LaravelData\Data;
+
+class PriceData extends Data
+{
+    public function __construct(
+        public string $currency,
+        public float $value,
+        #[MapInputName('priceType')]
+        public string $type,
+        public string $onixCodelistValue,
+    ) {}
+
+    public static function fromApi(array $data): self
+    {
+        return new self(
+            currency: $data['price']['currency'],
+            value: $data['price']['value'],
+            type: $data['priceType'],
+            onixCodelistValue: match ($data['priceType']) {
+                'PublisherRetailPrice' => '41',
+                'PublisherRetailPriceIncludingVat' => '42',
+                'ResellerPrice' => '05',
+                'ResellerPriceIncludingVat' => '07',
+
+                default => throw new UnsupportedPriceType(
+                    "Onix codelistmapping for PriceType '{$data['priceType']}' does not exist"
+                ),
+            },
+        );
+    }
+}

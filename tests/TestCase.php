@@ -1,10 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Tests;
+namespace Lasselehtinen\MockingbirdApiClient\Tests;
 
+use Dotenv\Dotenv;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Lasselehtinen\MockingbirdApiClient\MockingbirdApiClientServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use VendorName\Skeleton\SkeletonServiceProvider;
+use Spatie\LaravelData\LaravelDataServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -13,15 +15,34 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'VendorName\\Skeleton\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Lasselehtinen\\MockingbirdApiClient\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            SkeletonServiceProvider::class,
+            MockingbirdApiClientServiceProvider::class,
+            LaravelDataServiceProvider::class,
         ];
+    }
+
+    protected function defineEnvironment($app): void
+    {
+        $dotenv = Dotenv::createImmutable(
+            dirname(__DIR__),
+            '.env.testing'
+        );
+
+        $dotenv->safeLoad();
+
+        $app['config']->set('mockingbird-api-client.base_url', env('MOCKINGBIRD_BASE_URL'));
+        $app['config']->set('mockingbird-api-client.oauth_url', env('MOCKINGBIRD_OAUTH_URL'));
+        $app['config']->set('mockingbird-api-client.client_id', env('MOCKINGBIRD_CLIENT_ID'));
+        $app['config']->set('mockingbird-api-client.client_secret', env('MOCKINGBIRD_CLIENT_SECRET'));
+        $app['config']->set('mockingbird-api-client.username', env('MOCKINGBIRD_USERNAME'));
+        $app['config']->set('mockingbird-api-client.password', env('MOCKINGBIRD_PASSWORD'));
+        $app['config']->set('mockingbird-api-client.scope', env('MOCKINGBIRD_SCOPE'));
     }
 
     public function getEnvironmentSetUp($app)

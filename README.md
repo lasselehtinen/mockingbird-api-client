@@ -1,79 +1,72 @@
-# :package_description
+# This is a cliexternal API
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://github.com/spatie/package-skeleton-laravel/actions/workflows/run-tests.yml/badge.svg)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://github.com/spatie/package-skeleton-laravel/actions/workflows/fix-php-code-style-issues.yml/badge.svg)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/lasselehtinen/mockingbird-api-client.svg?style=flat-square)](https://packagist.org/packages/lasselehtinen/mockingbird-api-client)
+[![GitHub Tests Action Status](https://github.com/spatie/package-mockingbird-api-client-laravel/actions/workflows/run-tests.yml/badge.svg)](https://github.com/lasselehtinen/mockingbird-api-client/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://github.com/spatie/package-mockingbird-api-client-laravel/actions/workflows/fix-php-code-style-issues.yml/badge.svg)](https://github.com/lasselehtinen/mockingbird-api-client/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/lasselehtinen/mockingbird-api-client.svg?style=flat-square)](https://packagist.org/packages/lasselehtinen/mockingbird-api-client)
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-
-   To run it unattended — from a script, or by handing it to a coding agent — pass `--no-interaction`
-   (`-n`) and the answers as options. It never prompts, and exits non-zero with a message naming any
-   option it still needs:
-
-   ```bash
-   php ./configure.php -n --vendor-name="Spatie" --package-name="laravel-ray"
-   ```
-
-   Run "php ./configure.php --help" for the full list of options.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
 This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
+composer require lasselehtinen/mockingbird-api-client
 ```
 
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag=":package_slug-config"
+php artisan vendor:publish --tag="mockingbird-api-client-config"
 ```
 
 This is the contents of the published config file:
 
 ```php
 return [
+    'base_url' => env('MOCKINGBIRD_BASE_URL', 'https://tenantname-external-api-app.azurewebsites.net'),
+    'oauth_url' => env('MOCKINGBIRD_OAUTH_URL', 'https://tenantname-identity-app.azurewebsites.net/core/connect/token'),
+    'client_id' => env('MOCKINGBIRD_CLIENT_ID', 'client_name_here'),
+    'client_secret' => env('MOCKINGBIRD_CLIENT_SECRET', 'client_secret_here'),
+    'username' => env('MOCKINGBIRD_USERNAME', 'firstname.lastname@tenant.com'),
+    'password' => env('MOCKINGBIRD_PASSWORD', 'mockingbird_user_password_here'),
+    'scope' => env('MOCKINGBIRD_SCOPE', 'opus'),
 ];
 ```
 
-Optionally, you can publish the views using
+# Usage
 
-```bash
-php artisan vendor:publish --tag=":package_slug-views"
-```
+The package exposes dedicated services for each API area.
 
-## Usage
+## Edition
 
 ```php
-$:variable = new VendorName\Skeleton();
-echo $:variable->echoPhrase('Hello, VendorName!');
+use Lasselehtinen\MockingbirdApiClient\Editions\EditionService;
+
+$edition = app(EditionService::class);
+$edition = $edition->get('1ca73850-96c2-4ac3-8b98-44d35c9378d1');
 ```
+
+Or through dependency injection:
+
+```php
+use Lasselehtinen\MockingbirdApiClient\Editions\EditionService;
+
+final class EditionController
+{
+    public function __construct(
+        private readonly EditionService $edition,
+    ) {}
+
+    public function show(string $id)
+    {
+        return $this->edition->get($id);
+    }
+}
+```
+
+The service is registered as a singleton and can be resolved from Laravel's service container.
 
 ## Testing
 
@@ -95,7 +88,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Lasse Lehtinen](https://github.com/Lasselehtinen)
 - [All Contributors](../../contributors)
 
 ## License
