@@ -27,10 +27,7 @@ class PriceData extends Data
                 'PublisherRetailPriceIncludingVat' => '42',
                 'ResellerPrice' => '05',
                 'ResellerPriceIncludingVat' => '07',
-                'BudgetedResellerPrice' => null,
-                default => throw new UnsupportedPriceType(
-                    "Onix codelistmapping for PriceType '{$data['priceType']}' does not exist"
-                ),
+                default => null,
             },
         );
     }
