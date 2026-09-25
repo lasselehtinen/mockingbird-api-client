@@ -52,8 +52,14 @@ class EditionData extends Data
         #[MapInputName('mainGroup.name')]
         public string $mainGroup,
 
+        #[MapInputName('mainGroup.erpId')]
+        public int $mainGroupId,
+
         #[MapInputName('subgroup.name')]
         public string $subGroup,
+
+        #[MapInputName('subgroup.erpId')]
+        public int $subGroupId,
 
         #[MapInputName('measurements.depth')]
         public float $depth,
