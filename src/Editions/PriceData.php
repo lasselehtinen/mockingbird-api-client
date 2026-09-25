@@ -13,7 +13,7 @@ class PriceData extends Data
         public float $value,
         #[MapInputName('priceType')]
         public string $type,
-        public string $onixCodelistValue,
+        public ?string $onixCodelistValue,
     ) {}
 
     public static function fromApi(array $data): self
