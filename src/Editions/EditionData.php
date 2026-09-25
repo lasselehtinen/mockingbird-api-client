@@ -39,7 +39,7 @@ class EditionData extends Data
 
         public CostCenterData $costCenter,
 
-        public SeasonData $season,
+        public ?SeasonData $season,
 
         #[MapInputName('governingCode.name')]
         public string $governingCode,
@@ -84,7 +84,7 @@ class EditionData extends Data
         #[WithCast(DateTimeInterfaceCast::class, format: 'Y-m-d\TH:i:s')]
         public Carbon $publishingDate,
 
-        public int $stockBalance,
+        public ?int $stockBalance,
 
         public string $technicalProductionTypeName,
 
