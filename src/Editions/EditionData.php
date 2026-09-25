@@ -49,10 +49,10 @@ class EditionData extends Data
 
         public array $keywords,
 
-        public MainGroupData $mainGroup,
+        public ?MainGroupData $mainGroup,
 
         #[MapInputName('subgroup')]
-        public SubGroupData $subGroup,
+        public ?SubGroupData $subGroup,
 
         #[MapInputName('measurements.depth')]
         public float $depth,
