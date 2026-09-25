@@ -1,11 +1,21 @@
 # This is a cliexternal API
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/lasselehtinen/mockingbird-api-client.svg?style=flat-square)](https://packagist.org/packages/lasselehtinen/mockingbird-api-client)
-[![GitHub Tests Action Status](https://github.com/spatie/package-mockingbird-api-client-laravel/actions/workflows/run-tests.yml/badge.svg)](https://github.com/lasselehtinen/mockingbird-api-client/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://github.com/spatie/package-mockingbird-api-client-laravel/actions/workflows/fix-php-code-style-issues.yml/badge.svg)](https://github.com/lasselehtinen/mockingbird-api-client/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![run-tests](https://github.com/lasselehtinen/mockingbird-api-client/actions/workflows/run-tests.yml/badge.svg)](https://github.com/lasselehtinen/mockingbird-api-client/actions/workflows/run-tests.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/lasselehtinen/mockingbird-api-client.svg?style=flat-square)](https://packagist.org/packages/lasselehtinen/mockingbird-api-client)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+# Mockingbird External API Client
+
+A Laravel API client for Mockingbird that provides OAuth authentication, strongly typed DTOs powered by Spatie Laravel Data, and convenient service classes for accessing editions, contributors, assets and other Mockingbird resources.
+
+The package is built on top of `spatie/laravel-webhook-client` and provides:
+
+- Webhook endpoint registration
+- Payload parsing
+- Event mapping
+- Laravel event dispatching
+
+---
 
 ## Installation
 
