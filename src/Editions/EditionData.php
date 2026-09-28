@@ -45,6 +45,9 @@ class EditionData extends Data
         #[DataCollectionOf(ContributorData::class)]
         public DataCollection $contributors,
 
+        #[MapInputName('serie.name')]
+        public ?string $serie,
+
         public CostCenterData $costCenter,
 
         public ?SeasonData $season,

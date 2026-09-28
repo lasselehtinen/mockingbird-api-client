@@ -152,7 +152,15 @@ it('can fetch subtitle correctly', function () {
 })->group('integration');
 
 it('can fetch original title correctly', function () {
-    $editionService = app(EditionService::class);
-    $edition = $editionService->get('02906b41-c217-4e68-98a0-fa5212ea47b2');
+    $edition = app(EditionService::class)->get('02906b41-c217-4e68-98a0-fa5212ea47b2');
     expect($edition->originalTitle)->toBe('Århundradets kärlekssaga');
+})->group('integration');
+
+it('can fetch series correctly', function () {
+    $edition = app(EditionService::class)->get('1ca73850-96c2-4ac3-8b98-44d35c9378d1');
+    expect($edition->serie)->toBeNull();
+
+    $edition = app(EditionService::class)->get('e207df26-18f7-463b-b0d3-c661fd67eda3');
+    expect($edition->serie)->toBe('Mielensäpahoittaja');
+
 })->group('integration');
