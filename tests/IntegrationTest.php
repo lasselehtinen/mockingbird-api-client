@@ -96,3 +96,11 @@ it('can fetch edition data correctly', function () {
         ->and($edition->texts->first()->text)->toContain('Aseiden vaiettua moni veteraani heräsi öisiin painajaisiinsa.');
 
 })->group('integration');
+
+it('can handle missing season period correctly', function () {
+    $edition = app(EditionService::class)->get('a4451011-aa86-471d-8964-31fc175ff1ee');
+
+    expect($edition->id)->toBe('a4451011-aa86-471d-8964-31fc175ff1ee');
+    expect($edition->season->period)->toBeNull();
+    expect($edition->season->year)->toBeInt()->toBe(2024);
+})->group('integration');
