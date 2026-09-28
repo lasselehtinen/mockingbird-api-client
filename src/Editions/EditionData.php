@@ -94,9 +94,61 @@ class EditionData extends Data
         #[DataCollectionOf(TextData::class)]
         public DataCollection $texts,
 
+        #[Computed]
+        public ?string $internalTitle,
         /** TODO
          *
          * assets
          */
-    ) {}
+    ) {
+        $this->internalTitle = $this->resolveInternalTitle();
+    }
+
+    private function resolveInternalTitle(): ?string
+    {
+        $bindingCodeMapping = [
+            'Podcast' => 'podcast',
+            'Hardback' => 'kirja',
+            'Saddle-stitched' => 'kirja',
+            'Paperback' => 'kirja',
+            'Spiral bound' => 'kirja',
+            'Flex' => 'kirja',
+            'Pocket book' => 'pokkari',
+            'Trade paperback or "Jättipokkari"' => 'kirja',
+            'Board book' => 'kirja',
+            'Downloadable audio file' => 'ä-kirja',
+            'CD' => 'cd',
+            'MP3-CD' => 'cd',
+            'Other audio format' => 'muu audio',
+            'Picture-and-audio book' => 'kä-kirja',
+            'ePub2' => 'e-kirja',
+            'ePub3' => 'e-kirja',
+            'Application' => 'sovellus',
+            'Kit' => 'paketti',
+            'Miscellaneous' => 'muu',
+            'Pre-recorded digital audio player' => 'kirjastosoitin',
+            'PDF' => 'pdf',
+            'Calendar (Hardback)' => 'kalenteri',
+            'Calendar (Paperback)' => 'kalenteri',
+            'Calendar (Other)' => 'kalenteri',
+            'Marketing material' => 'mark. materiaali',
+            'Multiple-component retail product' => 'moniosainen',
+        ];
+
+        if (array_key_exists($this->bindingCode->name, $bindingCodeMapping) === false) {
+            throw new Exception('Could not map binding code for internal title. Binding code: '.$this->bindingCode->name);
+        }
+
+        $format = $bindingCodeMapping[$this->bindingCode->name];
+
+        /*
+        if (isset($this->product->activePrint->ebookHasAudioFile) && $this->product->activePrint->ebookHasAudioFile === true) {
+            $format = 'eä-kirja';
+        }*/
+
+        // Space reserved for format + one space
+        $spaceForFormat = mb_strlen($format) + 1;
+
+        return trim(mb_substr($this->title, 0, 50 - $spaceForFormat)).' '.$format;
+    }
 }

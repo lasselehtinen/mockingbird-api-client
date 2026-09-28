@@ -18,4 +18,23 @@ class EditionService
 
         return EditionData::from($response);
     }
+
+    /**
+     * @param  array<StockBalanceData>  $stockBalances
+     */
+    public function updateStockBalances(array $stockBalances): void
+    {
+        $payload = collect($stockBalances)
+            ->map(fn (StockBalanceData $stockBalance) => [
+                'ean' => strval($stockBalance->gtin),
+                'balance' => $stockBalance->balance,
+            ])
+            ->values()
+            ->all();
+
+        $this->client->put(
+            'v1/Edition/stock',
+            $payload
+        );
+    }
 }

@@ -8,30 +8,6 @@ use Illuminate\Support\Facades\Http;
 
 class MockingbirdApiClient
 {
-    protected function request(): PendingRequest
-    {
-        return Http::baseUrl(config('mockingbird-api-client.base_url'))
-            ->acceptJson()
-            ->withToken($this->accessToken());
-    }
-
-    public function get(string $path, array $query = []): array
-    {
-        return $this->request()
-            ->get($path, $query)
-            ->throw()
-            ->json();
-    }
-
-    protected function accessToken(): string
-    {
-        return Cache::remember(
-            'mockingbird-api-client.access-token',
-            now()->addMinutes(50),
-            fn () => $this->authenticate()
-        );
-    }
-
     protected function authenticate(): string
     {
         $response = Http::asForm()
@@ -50,5 +26,37 @@ class MockingbirdApiClient
             ->json();
 
         return $response['access_token'];
+    }
+
+    protected function accessToken(): string
+    {
+        return Cache::remember(
+            'mockingbird-api-client.access-token',
+            now()->addMinutes(50),
+            fn () => $this->authenticate()
+        );
+    }
+
+    protected function request(): PendingRequest
+    {
+        return Http::baseUrl(config('mockingbird-api-client.base_url'))
+            ->acceptJson()
+            ->withToken($this->accessToken());
+    }
+
+    public function get(string $path, array $query = []): array
+    {
+        return $this->request()
+            ->get($path, $query)
+            ->throw()
+            ->json();
+    }
+
+    public function put(string $path, array $payload): array
+    {
+        return $this->request()
+            ->put($path, $payload)
+            ->throw()
+            ->json();
     }
 }

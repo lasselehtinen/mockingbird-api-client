@@ -6,6 +6,7 @@ use Lasselehtinen\MockingbirdApiClient\Editions\ContributorRoleData;
 use Lasselehtinen\MockingbirdApiClient\Editions\EditionService;
 use Lasselehtinen\MockingbirdApiClient\Editions\LanguageData;
 use Lasselehtinen\MockingbirdApiClient\Editions\PriceData;
+use Lasselehtinen\MockingbirdApiClient\Editions\StockBalanceData;
 use Lasselehtinen\MockingbirdApiClient\Editions\TextData;
 use Lasselehtinen\MockingbirdApiClient\MockingbirdApiClient;
 use Spatie\LaravelData\DataCollection;
@@ -103,4 +104,28 @@ it('can handle missing season period correctly', function () {
     expect($edition->id)->toBe('a4451011-aa86-471d-8964-31fc175ff1ee');
     expect($edition->season->period)->toBeNull();
     expect($edition->season->year)->toBeInt()->toBe(2024);
+})->group('integration');
+
+it('can generate internal title correctly', function (string $editionId, string $expectedInternalTitle) {
+    $edition = app(EditionService::class)->get($editionId);
+    expect($edition->internalTitle)->toBe($expectedInternalTitle);
+})->with('internal titles')->group('integration');
+
+it('can update stock balances correctly', function () {
+    $service = app(EditionService::class);
+
+    try {
+        $service->updateStockBalances([
+            new StockBalanceData(gtin: 9789510368633, balance: 5),
+            new StockBalanceData(gtin: 9789524161558, balance: 7),
+        ]);
+
+        expect($service->get('f100c517-9a10-49a7-b9a5-21a0e8cbed75')->stockBalance)->toBe(5);
+        expect($service->get('fe5c41a5-782c-437b-8577-71f61d0392f4')->stockBalance)->toBe(7);
+    } finally {
+        $service->updateStockBalances([
+            new StockBalanceData(gtin: 9789510368633, balance: 0),
+            new StockBalanceData(gtin: 9789524161558, balance: 0),
+        ]);
+    }
 })->group('integration');
