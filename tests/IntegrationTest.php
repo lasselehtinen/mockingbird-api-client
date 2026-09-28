@@ -129,3 +129,16 @@ it('can update stock balances correctly', function () {
         ]);
     }
 })->group('integration');
+
+it('can fetch edition with gtin correctly', function () {
+    $editionService = app(EditionService::class);
+
+    $editionWithId = $editionService->get('1ca73850-96c2-4ac3-8b98-44d35c9378d1');
+    $editionWithGtin = $editionService->getByGtin(9789510374665);
+
+    // The output should be identical
+    expect($editionWithGtin->id)->toBe('1ca73850-96c2-4ac3-8b98-44d35c9378d1');
+    expect($editionWithGtin->gtin)->toBeInt()->toBe(9789510374665);
+    expect($editionWithId->toArray())->toEqual($editionWithGtin->toArray());
+
+})->group('integration');

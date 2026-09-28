@@ -19,6 +19,15 @@ class EditionService
         return EditionData::from($response);
     }
 
+    public function getByGtin(string|int $gtin): EditionData
+    {
+        return EditionData::from(
+            $this->client->get(
+                "v1/EditionByIsbn/{$gtin}"
+            )
+        );
+    }
+
     /**
      * @param  array<StockBalanceData>  $stockBalances
      */
