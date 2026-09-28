@@ -3,7 +3,9 @@
 namespace Lasselehtinen\MockingbirdApiClient\Editions;
 
 use Carbon\Carbon;
+use Exception;
 use Lasselehtinen\MockingbirdApiClient\Casts\NonEmptyTextsCast;
+use Spatie\LaravelData\Attributes\Computed;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\WithCast;
@@ -104,7 +106,7 @@ class EditionData extends Data
         $this->internalTitle = $this->resolveInternalTitle();
     }
 
-    private function resolveInternalTitle(): ?string
+    private function resolveInternalTitle(): string
     {
         $bindingCodeMapping = [
             'Podcast' => 'podcast',
