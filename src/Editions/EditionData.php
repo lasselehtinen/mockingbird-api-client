@@ -22,6 +22,9 @@ class EditionData extends Data
         #[MapInputName('editionIdLegacy')]
         public int $legacyId,
 
+        #[MapInputName('workIdLegacy')]
+        public int $legacyWorkId,
+
         #[MapInputName('Title')]
         public string $title,
 

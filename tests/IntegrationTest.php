@@ -28,6 +28,7 @@ it('can fetch edition data correctly', function () {
 
     expect($edition->id)->toBe('1ca73850-96c2-4ac3-8b98-44d35c9378d1');
     expect($edition->legacyId)->toBeInt()->toBe(244940);
+    expect($edition->legacyWorkId)->toBeInt()->toBe(244939);
     expect($edition->title)->toBe('Murtuneet mielet');
     expect($edition->gtin)->toBeInt()->toBe(9789510374665);
     expect($edition->bindingCode->id)->toBe('BB');
