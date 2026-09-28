@@ -164,3 +164,8 @@ it('can fetch series correctly', function () {
     expect($edition->serie)->toBe('Mielensäpahoittaja');
 
 })->group('integration');
+
+it('can fetch book types correctly', function () {
+    $edition = app(EditionService::class)->get('84113283-4fc8-4f77-9c3f-0f1e71710575');
+    expect($edition->bookTypes)->toContain('Booktok', 'Tiktok', 'spicy');
+})->group('integration');

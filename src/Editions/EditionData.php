@@ -59,6 +59,7 @@ class EditionData extends Data
         public DataCollection $awards,
 
         public array $keywords,
+        public array $bookTypes,
 
         public ?MainGroupData $mainGroup,
 
