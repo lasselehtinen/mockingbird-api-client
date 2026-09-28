@@ -25,6 +25,9 @@ class EditionData extends Data
         #[MapInputName('Title')]
         public string $title,
 
+        public ?string $subtitle,
+        public ?string $originalTitle,
+
         #[MapInputName('ean')]
         public ?int $gtin,
 

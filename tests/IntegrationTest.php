@@ -85,6 +85,7 @@ it('can fetch edition data correctly', function () {
 
     expect($edition->season->period)->toBe('Autumn');
     expect($edition->season->year)->toBeInt()->toBe(2013);
+    expect($edition->season->name)->toBe('2013/2');
 
     expect($edition->stockBalance)->toBe(0);
     expect($edition->technicalProductionTypeName)->toBe('BBF Generic');
@@ -141,4 +142,16 @@ it('can fetch edition with gtin correctly', function () {
     expect($editionWithGtin->gtin)->toBeInt()->toBe(9789510374665);
     expect($editionWithId->toArray())->toEqual($editionWithGtin->toArray());
 
+})->group('integration');
+
+it('can fetch subtitle correctly', function () {
+    $editionService = app(EditionService::class);
+    $edition = $editionService->get('ffeea60f-3cdc-479c-8486-620b60695311');
+    expect($edition->subtitle)->toBe('Historiaa ja reseptiikkaa');
+})->group('integration');
+
+it('can fetch original title correctly', function () {
+    $editionService = app(EditionService::class);
+    $edition = $editionService->get('02906b41-c217-4e68-98a0-fa5212ea47b2');
+    expect($edition->originalTitle)->toBe('Århundradets kärlekssaga');
 })->group('integration');
