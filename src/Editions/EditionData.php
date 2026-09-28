@@ -48,7 +48,7 @@ class EditionData extends Data
         #[MapInputName('serie.name')]
         public ?string $serie,
 
-        public CostCenterData $costCenter,
+        public ?CostCenterData $costCenter,
 
         public ?SeasonData $season,
 
