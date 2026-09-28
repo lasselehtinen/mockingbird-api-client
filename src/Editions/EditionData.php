@@ -92,7 +92,7 @@ class EditionData extends Data
         public bool $textAndDataMiningProhibited,
 
         #[WithCast(DateTimeInterfaceCast::class, format: 'Y-m-d\TH:i:s')]
-        public Carbon $publishingDate,
+        public ?Carbon $publishingDate,
 
         public ?int $stockBalance,
 
