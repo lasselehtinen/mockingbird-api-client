@@ -5,6 +5,7 @@ namespace Lasselehtinen\MockingbirdApiClient\Editions;
 use Carbon\Carbon;
 use Exception;
 use Lasselehtinen\MockingbirdApiClient\Casts\NonEmptyTextsCast;
+use Lasselehtinen\MockingbirdApiClient\MockingbirdApiClient;
 use Spatie\LaravelData\Attributes\Computed;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
@@ -231,5 +232,19 @@ class EditionData extends Data
 
             default => 1.205,
         };
+    }
+
+    public function mainEditionCostCenter(): ?CostCenterData
+    {
+        $work = app(MockingbirdApiClient::class)->get('v1/Work/'.$this->legacyWorkId);
+
+        if (isset($work['costCenter']['code']) === false) {
+            return null;
+        }
+
+        return new CostCenterData(
+            id: $work['costCenter']['code'],
+            name: $work['costCenter']['name'],
+        );
     }
 }

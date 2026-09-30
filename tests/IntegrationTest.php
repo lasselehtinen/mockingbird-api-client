@@ -200,3 +200,8 @@ it('can fetch book types correctly', function () {
     $edition = app(EditionService::class)->get('84113283-4fc8-4f77-9c3f-0f1e71710575');
     expect($edition->bookTypes)->toContain('Booktok', 'Tiktok', 'spicy');
 })->group('integration');
+
+it('can can get main editions cost center correctly', function () {
+    $edition = app(EditionService::class)->get('d8a1c1ae-dfe5-476f-88e4-7a3a157dc7d0');
+    expect($edition->mainEditionCostCenter()->id)->toBe(301);
+})->group('integration');
