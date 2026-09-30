@@ -205,3 +205,12 @@ it('can can get main editions cost center correctly', function () {
     $edition = app(EditionService::class)->get('d8a1c1ae-dfe5-476f-88e4-7a3a157dc7d0');
     expect($edition->mainEditionCostCenter()->id)->toBe(301);
 })->group('integration');
+
+it('can can get main editions gtin correctly', function () {
+    $edition = app(EditionService::class)->get('81621fd3-648f-412a-b08f-ab325c3bdf3e');
+    expect($edition->mainEditionGtin())->toBe(9789510366264);
+
+    // ePub version of the same book
+    $edition = app(EditionService::class)->get('d8a1c1ae-dfe5-476f-88e4-7a3a157dc7d0');
+    expect($edition->mainEditionGtin())->toBe(9789510366264);
+})->group('integration');

@@ -16,6 +16,9 @@ use Spatie\LaravelData\DataCollection;
 
 class EditionData extends Data
 {
+    /** @var array<string, mixed> */
+    private array $work = [];
+
     public function __construct(
         #[MapInputName('productId')]
         public string $id,
@@ -112,6 +115,7 @@ class EditionData extends Data
 
         #[Computed]
         public ?string $internalTitle,
+
         /** TODO
          *
          * assets
@@ -119,6 +123,8 @@ class EditionData extends Data
     ) {
         $this->internalTitle = $this->resolveInternalTitle();
         $this->pages = $this->pages === 0 ? null : $this->pages;
+
+        $this->work = app(MockingbirdApiClient::class)->get('v1/Work/'.$this->legacyWorkId);
     }
 
     private function resolveInternalTitle(): string
@@ -236,15 +242,18 @@ class EditionData extends Data
 
     public function mainEditionCostCenter(): ?CostCenterData
     {
-        $work = app(MockingbirdApiClient::class)->get('v1/Work/'.$this->legacyWorkId);
-
-        if (isset($work['costCenter']['code']) === false) {
+        if (isset($this->work['costCenter']['code']) === false) {
             return null;
         }
 
         return new CostCenterData(
-            id: $work['costCenter']['code'],
-            name: $work['costCenter']['name'],
+            id: $this->work['costCenter']['code'],
+            name: $this->work['costCenter']['name'],
         );
+    }
+
+    public function mainEditionGtin(): int
+    {
+        return $this->work['mainEditionIsbn'];
     }
 }
