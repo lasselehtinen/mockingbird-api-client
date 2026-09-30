@@ -71,15 +71,6 @@ it('can fetch edition data correctly', function () {
     expect($edition->width)->toBeFloat()->toBe(140.000);
     expect($edition->originalLanguages)->toBeEmpty();
     expect($edition->pages)->toBeInt()->toBe(475);
-
-    expect($edition->prices)->toBeInstanceOf(DataCollection::class)
-        ->and($edition->prices)->toHaveCount(4)
-        ->and($edition->prices->first())->toBeInstanceOf(PriceData::class)
-        ->and($edition->prices->first()->value)->toBeFloat()->toBe(41.32)
-        ->and($edition->prices->first()->currency)->toBe('EUR')
-        ->and($edition->prices->first()->type)->toBe('PublisherRetailPrice')
-        ->and($edition->prices->first()->onixCodelistValue)->toBe('41');
-
     expect($edition->textAndDataMiningProhibited)->toBeFalse();
     expect($edition->publishingDate->format('Y-m-d'))->toBe('2013-08-15');
     expect($edition->publishingHouse)->toBe('WSOY');
@@ -98,6 +89,46 @@ it('can fetch edition data correctly', function () {
         ->and($edition->texts->first())->toBeInstanceOf(TextData::class)
         ->and($edition->texts->first()->text)->toContain('Aseiden vaiettua moni veteraani heräsi öisiin painajaisiinsa.');
 
+})->group('integration');
+
+it('can fetch prices correctly', function () {
+    $edition = app(EditionService::class)->get('1ca73850-96c2-4ac3-8b98-44d35c9378d1');
+
+    expect($edition->prices)->toBeInstanceOf(DataCollection::class)
+        ->and($edition->prices)->toHaveCount(4)
+        ->and($edition->prices->first())->toBeInstanceOf(PriceData::class)
+        ->and($edition->prices->first()->value)->toBeFloat()->toBe(41.32)
+        ->and($edition->prices->first()->currency)->toBe('EUR')
+        ->and($edition->prices->first()->type)->toBe('PublisherRetailPrice')
+        ->and($edition->prices->first()->onixCodelistValue)->toBe('41');
+})->group('integration');
+
+it('can fetch calculated publisher retail prices correctly', function () {
+    // Hardback
+    $edition = app(EditionService::class)->get('81621fd3-648f-412a-b08f-ab325c3bdf3e');
+    $price = $edition->calculatedPublisherRetailPrice();
+
+    expect($price)->not->toBeNull();
+    expect($price->type)->toBe('CalculatedPublisherRetailPrice');
+    expect($price->currency)->toBe('EUR');
+    expect($price->onixCodelistValue)->toBeNull();
+    expect($price->value)->toBeFloat()->toBe(22.9);
+
+    // Pocket book
+    $edition = app(EditionService::class)->get('e56c79de-ebbd-4f71-a0f1-d92304b797f2');
+    expect($edition->calculatedPublisherRetailPrice()->value)->toBeFloat()->toBe(10.4);
+
+    // E-book
+    $edition = app(EditionService::class)->get('d8a1c1ae-dfe5-476f-88e4-7a3a157dc7d0');
+    expect($edition->calculatedPublisherRetailPrice()->value)->toBeFloat()->toBe(7.6);
+
+    // Product without any price
+    $edition = app(EditionService::class)->get('4f9414aa-af6a-4c2e-b655-ae6ea32c007f');
+    expect($edition->calculatedPublisherRetailPrice()->value)->toBeFloat()->toBe(0.0);
+
+    // CD
+    $edition = app(EditionService::class)->get('132692a2-f2bd-43bd-b3cd-61cc6be77485');
+    expect($edition->calculatedPublisherRetailPrice()->value)->toBeFloat()->toBe(19.9);
 })->group('integration');
 
 it('can handle missing season period correctly', function () {

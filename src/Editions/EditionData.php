@@ -42,6 +42,8 @@ class EditionData extends Data
 
         public BindingCodeData $bindingCode,
 
+        public bool $isDigital,
+
         #[DataCollectionOf(ContributorData::class)]
         public DataCollection $contributors,
 
@@ -162,5 +164,70 @@ class EditionData extends Data
         $spaceForFormat = mb_strlen($format) + 1;
 
         return trim(mb_substr($this->title, 0, 50 - $spaceForFormat)).' '.$format;
+    }
+
+    public function calculatedPublisherRetailPrice(): ?PriceData
+    {
+        $resellerPrice = $this->prices
+            ->toCollection()
+            ->firstWhere('type', 'ResellerPriceIncludingVat')
+            ?->value;
+
+        if ($resellerPrice === null) {
+            return null;
+        }
+
+        if ($resellerPrice === 0.0) {
+            $value = 0.0;
+        } else {
+            $value = $resellerPrice * $this->retailPriceMultiplier();
+
+            // Rounding for pocket books, manga and digital products is up to nearest 10 cents
+            if ($this->costCenter?->id === 965 || $this->bindingCode->name === 'Pocket book' || $this->isDigital) {
+                $value = ceil($value * 10) / 10;
+            } else {
+                // All others to nearest 90 cents
+                $fraction = $value - floor($value);
+
+                if ($fraction > 0.9) {
+                    $value++;
+                }
+
+                $value = floor($value) + 0.9;
+            }
+        }
+
+        return new PriceData(
+            currency: 'EUR',
+            value: $value,
+            type: 'CalculatedPublisherRetailPrice',
+            onixCodelistValue: null,
+        );
+    }
+
+    public function retailPriceMultiplier(): float
+    {
+        // Manga and pocket books
+        if ($this->costCenter?->id === 965 || $this->bindingCode->name === 'Pocket book') {
+            return 1.645;
+        }
+
+        // Immaterial
+        if ($this->isDigital) {
+            return 1.435;
+        }
+
+        // Other formats and default
+        return match ($this->bindingCode->name) {
+            'Application',
+            'Downloadable audio file',
+            'ePub2',
+            'ePub3',
+            'PDF',
+            'Picture-and-audio book',
+            'Podcast' => 1.435,
+
+            default => 1.205,
+        };
     }
 }
