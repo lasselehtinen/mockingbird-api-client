@@ -86,6 +86,7 @@ class EditionData extends Data
         #[DataCollectionOf(LanguageData::class)]
         public DataCollection $originalLanguages,
 
+        #[MapInputName('pages')]
         public ?int $pages,
 
         #[DataCollectionOf(PriceData::class)]
@@ -116,6 +117,7 @@ class EditionData extends Data
          */
     ) {
         $this->internalTitle = $this->resolveInternalTitle();
+        $this->pages = $this->pages === 0 ? null : $this->pages;
     }
 
     private function resolveInternalTitle(): string
