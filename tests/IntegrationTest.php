@@ -201,16 +201,34 @@ it('can fetch book types correctly', function () {
     expect($edition->bookTypes)->toContain('Booktok', 'Tiktok', 'spicy');
 })->group('integration');
 
-it('can can get main editions cost center correctly', function () {
+it('can get main editions cost center correctly', function () {
     $edition = app(EditionService::class)->get('d8a1c1ae-dfe5-476f-88e4-7a3a157dc7d0');
-    expect($edition->mainEditionCostCenter()->id)->toBe(301);
+    expect($edition->mainEditionCostCenter->id)->toBe(301);
 })->group('integration');
 
-it('can can get main editions gtin correctly', function () {
+it('can get main editions gtin correctly', function () {
     $edition = app(EditionService::class)->get('81621fd3-648f-412a-b08f-ab325c3bdf3e');
-    expect($edition->mainEditionGtin())->toBe(9789510366264);
+    expect($edition->mainEditionGtin)->toBe(9789510366264);
 
     // ePub version of the same book
     $edition = app(EditionService::class)->get('d8a1c1ae-dfe5-476f-88e4-7a3a157dc7d0');
-    expect($edition->mainEditionGtin())->toBe(9789510366264);
+    expect($edition->mainEditionGtin)->toBe(9789510366264);
+})->group('integration');
+
+it('can check if edition is main edition correctly', function () {
+    $edition = app(EditionService::class)->get('132692a2-f2bd-43bd-b3cd-61cc6be77485');
+    expect($edition->isMainEdition)->toBeTrue();
+
+    // Product that is not main edition
+    $edition = app(EditionService::class)->get('26aef4ea-8ae0-4ec7-b2e8-d62f6f82e570');
+    expect($edition->isMainEdition)->toBeFalse();
+})->group('integration');
+
+it('can check if edition is web edition correctly', function () {
+    $edition = app(EditionService::class)->get('e207df26-18f7-463b-b0d3-c661fd67eda3');
+    expect($edition->isWebEdition)->toBeTrue();
+
+    // Product that is not web edition
+    $edition = app(EditionService::class)->get('416fb675-0cae-466b-ac63-7da5f014eb32');
+    expect($edition->isWebEdition)->toBeFalse();
 })->group('integration');

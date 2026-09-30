@@ -19,6 +19,12 @@ class EditionData extends Data
     /** @var array<string, mixed> */
     private array $work = [];
 
+    #[Computed]
+    public bool $isMainEdition;
+
+    #[Computed]
+    public bool $isWebEdition;
+
     public function __construct(
         #[MapInputName('productId')]
         public string $id,
@@ -125,6 +131,9 @@ class EditionData extends Data
         $this->pages = $this->pages === 0 ? null : $this->pages;
 
         $this->work = app(MockingbirdApiClient::class)->get('v1/Work/'.$this->legacyWorkId);
+        $this->isMainEdition = $this->id === $this->work['mainEditionProductId'];
+        $this->isWebEdition = $this->id === $this->work['webEditionProductId'];
+
     }
 
     private function resolveInternalTitle(): string
