@@ -128,6 +128,9 @@ class EditionData extends Data
         #[Computed]
         public ?string $countryOfManufacture,
 
+        #[MapInputName('dispositionCode.name')]
+        public string $dispositionCode,
+
         /** TODO
          *
          * assets

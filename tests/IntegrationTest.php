@@ -259,3 +259,12 @@ it('can get country of manufacture correctly', function () {
     $edition = app(EditionService::class)->get('81621fd3-648f-412a-b08f-ab325c3bdf3e');
     expect($edition->countryOfManufacture)->toBe('FI');
 })->group('integration');
+
+it('can get disposition code correctly', function () {
+    $edition = app(EditionService::class)->get('81621fd3-648f-412a-b08f-ab325c3bdf3e');
+    expect($edition->dispositionCode)->toBe('d');
+
+    // Contact without address information
+    $edition = app(EditionService::class)->get('d8a1c1ae-dfe5-476f-88e4-7a3a157dc7d0');
+    expect($edition->dispositionCode)->toBe('y');
+})->group('integration');
