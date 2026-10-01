@@ -46,6 +46,7 @@ class MockingbirdApiClient
 
     public function get(string $path, array $query = []): array
     {
+
         return $this->request()
             ->get($path, $query)
             ->throw()

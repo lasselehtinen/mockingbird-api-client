@@ -4,8 +4,11 @@ namespace Lasselehtinen\MockingbirdApiClient\Editions;
 
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Str;
 use Lasselehtinen\MockingbirdApiClient\Casts\NonEmptyTextsCast;
 use Lasselehtinen\MockingbirdApiClient\MockingbirdApiClient;
+use League\ISO3166\ISO3166;
+use OutOfBoundsException;
 use Spatie\LaravelData\Attributes\Computed;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
@@ -122,12 +125,16 @@ class EditionData extends Data
         #[Computed]
         public ?string $internalTitle,
 
+        #[Computed]
+        public ?string $countryOfManufacture,
+
         /** TODO
          *
          * assets
          */
     ) {
         $this->internalTitle = $this->resolveInternalTitle();
+        $this->countryOfManufacture = $this->resolveCountryOfManufacture();
         $this->pages = $this->pages === 0 ? null : $this->pages;
 
         $this->work = app(MockingbirdApiClient::class)->get('v1/Work/'.$this->legacyWorkId);
@@ -182,6 +189,40 @@ class EditionData extends Data
         $spaceForFormat = mb_strlen($format) + 1;
 
         return trim(mb_substr($this->title, 0, 50 - $spaceForFormat)).' '.$format;
+    }
+
+    private function resolveCountryOfManufacture(): ?string
+    {
+        if ($this->isDigital) {
+            return null;
+        }
+
+        $printer = $this->contributors
+            ->toCollection()
+            ->where('role.name', 'Printer')
+            ->reject(fn (ContributorData $contributor) => Str::contains($contributor->firstName, 'Yhteispainatus') || Str::contains($contributor->lastName ?? '', 'Yhteispainatus'))
+            ->first();
+
+        if ($printer === null) {
+            return null;
+        }
+
+        $contact = app(MockingbirdApiClient::class)->get('v1/Contact/'.$printer->contactIdLegacy);
+
+        foreach ($contact['addresses'] as $address) {
+            if (empty($address['country'])) {
+                continue;
+            }
+
+            try {
+                return (new ISO3166)->name($address['country'])['alpha2'];
+            } catch (OutOfBoundsException) {
+                throw new Exception('Cannot find ISO-3166 code for country named '.$address['country']
+                );
+            }
+        }
+
+        return null;
     }
 
     public function calculatedPublisherRetailPrice(): ?PriceData
