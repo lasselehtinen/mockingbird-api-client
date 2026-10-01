@@ -128,9 +128,6 @@ class EditionData extends Data
         #[Computed]
         public ?string $internalTitle,
 
-        #[Computed]
-        public ?string $countryOfManufacture,
-
         #[MapInputName('dispositionCode.name')]
         public string $dispositionCode,
 
@@ -140,7 +137,6 @@ class EditionData extends Data
          */
     ) {
         $this->internalTitle = $this->resolveInternalTitle();
-        $this->countryOfManufacture = $this->resolveCountryOfManufacture();
         $this->isTranslated = $this->resolveIsTranslated();
         $this->pages = $this->pages === 0 ? null : $this->pages;
 
@@ -198,7 +194,7 @@ class EditionData extends Data
         return trim(mb_substr($this->title, 0, 50 - $spaceForFormat)).' '.$format;
     }
 
-    private function resolveCountryOfManufacture(): ?string
+    public function countryOfManufacture(): ?string
     {
         if ($this->isDigital) {
             return null;

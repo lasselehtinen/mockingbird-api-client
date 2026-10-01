@@ -41,12 +41,12 @@ class MockingbirdApiClient
     {
         return Http::baseUrl(config('mockingbird-api-client.base_url'))
             ->acceptJson()
-            ->withToken($this->accessToken());
+            ->withToken($this->accessToken())
+            ->timeout(5);
     }
 
     public function get(string $path, array $query = []): array
     {
-
         return $this->request()
             ->get($path, $query)
             ->throw()

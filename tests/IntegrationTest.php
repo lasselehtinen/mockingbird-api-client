@@ -203,16 +203,16 @@ it('can fetch book types correctly', function () {
 
 it('can get main editions cost center correctly', function () {
     $edition = app(EditionService::class)->get('d8a1c1ae-dfe5-476f-88e4-7a3a157dc7d0');
-    expect($edition->mainEditionCostCenter->id)->toBe(301);
+    expect($edition->mainEditionCostCenter()->id)->toBe(301);
 })->group('integration');
 
 it('can get main editions gtin correctly', function () {
     $edition = app(EditionService::class)->get('81621fd3-648f-412a-b08f-ab325c3bdf3e');
-    expect($edition->mainEditionGtin)->toBe(9789510366264);
+    expect($edition->mainEditionGtin())->toBe(9789510366264);
 
     // ePub version of the same book
     $edition = app(EditionService::class)->get('d8a1c1ae-dfe5-476f-88e4-7a3a157dc7d0');
-    expect($edition->mainEditionGtin)->toBe(9789510366264);
+    expect($edition->mainEditionGtin())->toBe(9789510366264);
 })->group('integration');
 
 it('can check if edition is main edition correctly', function () {
@@ -235,29 +235,29 @@ it('can check if edition is web edition correctly', function () {
 
 it('can get country of manufacture correctly', function () {
     $edition = app(EditionService::class)->get('81621fd3-648f-412a-b08f-ab325c3bdf3e');
-    expect($edition->countryOfManufacture)->toBe('FI');
+    expect($edition->countryOfManufacture())->toBe('FI');
 
     // Contact without address information
     $edition = app(EditionService::class)->get('2f5a7df6-2ba9-46f5-b9d8-4ca84c633997');
-    expect($edition->countryOfManufacture)->toBeNull();
+    expect($edition->countryOfManufacture())->toBeNull();
 
     // Product with only "Yhteyspainatus" printer
     $edition = app(EditionService::class)->get('43b39da0-5bd7-4b6a-baa7-d9282283fadd');
-    expect($edition->countryOfManufacture)->toBeNull();
+    expect($edition->countryOfManufacture())->toBeNull();
 
     // Digital product should return null
     $edition = app(EditionService::class)->get('7b24d4fa-a7fc-46ec-a23c-201d0d49e094');
-    expect($edition->countryOfManufacture)->toBeNull();
+    expect($edition->countryOfManufacture())->toBeNull();
 
     // Product with "Yhteispainatus" as the printer that has a country of manufacture
     $edition = app(EditionService::class)->get('a44aa24b-4157-45f7-a34d-8cecee8feb49');
-    expect($edition->countryOfManufacture)->toBe('SK');
+    expect($edition->countryOfManufacture())->toBe('SK');
 
     $edition = app(EditionService::class)->get('6b0a6e57-8ad1-4e0b-bfde-6b7817e08044');
-    expect($edition->countryOfManufacture)->toBe('CN');
+    expect($edition->countryOfManufacture())->toBe('CN');
 
     $edition = app(EditionService::class)->get('81621fd3-648f-412a-b08f-ab325c3bdf3e');
-    expect($edition->countryOfManufacture)->toBe('FI');
+    expect($edition->countryOfManufacture())->toBe('FI');
 })->group('integration');
 
 it('can get disposition code correctly', function () {
