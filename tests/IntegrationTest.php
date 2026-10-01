@@ -268,3 +268,18 @@ it('can get disposition code correctly', function () {
     $edition = app(EditionService::class)->get('d8a1c1ae-dfe5-476f-88e4-7a3a157dc7d0');
     expect($edition->dispositionCode)->toBe('y');
 })->group('integration');
+
+it('can get is translated boolean correctly', function () {
+    // Product that is not translated
+    $edition = app(EditionService::class)->get('823a10a6-06c7-4aec-9569-b8fa9ce9fc74');
+    expect($edition->isTranslated)->toBeFalse();
+
+    // Product that has translator
+    $edition = app(EditionService::class)->get('8f242f53-38f4-4231-8e5f-8770ba7cfebe');
+    expect($edition->isTranslated)->toBeTrue();
+
+    // Product that has main group "Käännetty L&N" but has no translator
+    $edition = app(EditionService::class)->get('bbea8be0-0ed3-4710-a185-4ada1d7d8d94');
+    expect($edition->isTranslated)->toBeFalse();
+
+})->group('integration');

@@ -28,6 +28,9 @@ class EditionData extends Data
     #[Computed]
     public bool $isWebEdition;
 
+    #[Computed]
+    public bool $isTranslated;
+
     public function __construct(
         #[MapInputName('productId')]
         public string $id,
@@ -138,6 +141,7 @@ class EditionData extends Data
     ) {
         $this->internalTitle = $this->resolveInternalTitle();
         $this->countryOfManufacture = $this->resolveCountryOfManufacture();
+        $this->isTranslated = $this->resolveIsTranslated();
         $this->pages = $this->pages === 0 ? null : $this->pages;
 
         $this->work = app(MockingbirdApiClient::class)->get('v1/Work/'.$this->legacyWorkId);
@@ -308,5 +312,16 @@ class EditionData extends Data
     public function mainEditionGtin(): int
     {
         return $this->work['mainEditionIsbn'];
+    }
+
+    public function resolveIsTranslated(): bool
+    {
+        $translators = $this->contributors
+            ->toCollection()
+            ->filter(
+                fn (ContributorData $contributor) => Str::contains($contributor->role->name, 'Translator')
+            );
+
+        return $translators->isNotEmpty();
     }
 }
