@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Collection;
 use Lasselehtinen\MockingbirdApiClient\Editions\AwardData;
 use Lasselehtinen\MockingbirdApiClient\Editions\ContributorData;
 use Lasselehtinen\MockingbirdApiClient\Editions\ContributorRoleData;
@@ -281,5 +282,26 @@ it('can get is translated boolean correctly', function () {
     // Product that has main group "Käännetty L&N" but has no translator
     $edition = app(EditionService::class)->get('bbea8be0-0ed3-4710-a185-4ada1d7d8d94');
     expect($edition->isTranslated)->toBeFalse();
+
+})->group('integration');
+
+it('can handle deleted season data correctly', function () {
+    // Product that is not translated
+    $edition = app(EditionService::class)->get('f0f99341-af78-465a-9641-11e35d7ec1be');
+
+    expect($edition->season->period)->toBeNull();
+    expect($edition->season->year)->toBeNull();
+
+})->group('integration');
+
+it('can handle missing contributor last name correctly', function () {
+    // Product that is not translated
+    $edition = app(EditionService::class)->get('f0f99341-af78-465a-9641-11e35d7ec1be');
+
+    $contributors = $edition->contributors->toCollection()->where('firstName', 'Keski-Suomen Sivu Oy');
+
+    expect($contributors)->toBeInstanceOf(Collection::class)
+        ->and($contributors)->toHaveCount(2)
+        ->and($contributors->first()->fullName)->toBe('Keski-Suomen Sivu Oy');
 
 })->group('integration');
