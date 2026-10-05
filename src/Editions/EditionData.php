@@ -54,7 +54,7 @@ class EditionData extends Data
         public string $publishingHouse,
 
         #[MapInputName('brand.name')]
-        public string $brand,
+        public ?string $brand,
 
         public BindingCodeData $bindingCode,
 
