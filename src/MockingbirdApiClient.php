@@ -42,6 +42,7 @@ class MockingbirdApiClient
         return Http::baseUrl(config('mockingbird-api-client.base_url'))
             ->acceptJson()
             ->withToken($this->accessToken())
+            ->retry(3, 2000)
             ->timeout(5);
     }
 
