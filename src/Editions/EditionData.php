@@ -31,6 +31,9 @@ class EditionData extends Data
     #[Computed]
     public bool $isTranslated;
 
+    #[Computed]
+    public ?string $imprint;
+
     public function __construct(
         #[MapInputName('productId')]
         public string $id,
@@ -149,6 +152,8 @@ class EditionData extends Data
         $this->height = $this->height === 0.0 ? null : $this->height;
         $this->weight = $this->weight === 0.0 ? null : $this->weight;
         $this->width = $this->width === 0.0 ? null : $this->width;
+
+        $this->imprint = $this->resolveImprint();
     }
 
     private function resolveInternalTitle(): string
@@ -324,5 +329,22 @@ class EditionData extends Data
             );
 
         return $translators->isNotEmpty();
+    }
+
+    private function resolveImprint(): ?string
+    {
+        if ($this->brand === null) {
+            return null;
+        }
+
+        if ($this->brand === 'Johnny Kniga') {
+            return null;
+        }
+
+        if ($this->brand === $this->publishingHouse) {
+            return null;
+        }
+
+        return $this->brand;
     }
 }

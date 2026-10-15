@@ -312,3 +312,21 @@ it('can handle zero measurement values correctly', function () {
 
     expect($edition->width)->toBeNull();
 })->group('integration');
+
+it('can return imprints correctly', function () {
+    // Normal WSOY product
+    $edition = app(EditionService::class)->getByGtin(9789510366264);
+    expect($edition->imprint)->toBeNull();
+
+    // Bazar product without brand
+    $edition = app(EditionService::class)->getByGtin(9789522799531);
+    expect($edition->imprint)->toBeNull();
+
+    // Readme product with brand "Kids.fi"
+    $edition = app(EditionService::class)->getByGtin(9789522563828);
+    expect($edition->imprint)->toBe('Kids.fi');
+
+    // Docendo product with brand "CrimeTime"
+    $edition = app(EditionService::class)->getByGtin(9789528504627);
+    expect($edition->imprint)->toBe('CrimeTime');
+})->group('integration');
