@@ -305,3 +305,10 @@ it('can handle missing contributor last name correctly', function () {
         ->and($contributors->first()->fullName)->toBe('Keski-Suomen Sivu Oy');
 
 })->group('integration');
+
+it('can handle zero measurement values correctly', function () {
+    // Product that is not translated
+    $edition = app(EditionService::class)->getByGtin(9789510382233);
+
+    expect($edition->width)->toBeNull();
+})->group('integration');

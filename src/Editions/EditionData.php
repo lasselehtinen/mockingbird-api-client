@@ -85,16 +85,16 @@ class EditionData extends Data
         public ?SubGroupData $subGroup,
 
         #[MapInputName('measurements.depth')]
-        public float $depth,
+        public ?float $depth,
 
         #[MapInputName('measurements.height')]
-        public float $height,
+        public ?float $height,
 
         #[MapInputName('measurements.weight')]
-        public float $weight,
+        public ?float $weight,
 
         #[MapInputName('measurements.width')]
-        public float $width,
+        public ?float $width,
 
         #[DataCollectionOf(LanguageData::class)]
         public DataCollection $languages,
@@ -144,6 +144,11 @@ class EditionData extends Data
         $this->isMainEdition = $this->id === $this->work['mainEditionProductId'];
         $this->isWebEdition = $this->id === $this->work['webEditionProductId'];
 
+        // Map 0.0 value in measurements to null
+        $this->depth = $this->depth === 0.0 ? null : $this->depth;
+        $this->height = $this->height === 0.0 ? null : $this->height;
+        $this->weight = $this->weight === 0.0 ? null : $this->weight;
+        $this->width = $this->width === 0.0 ? null : $this->width;
     }
 
     private function resolveInternalTitle(): string
