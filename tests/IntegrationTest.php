@@ -330,3 +330,13 @@ it('can return imprints correctly', function () {
     $edition = app(EditionService::class)->getByGtin(9789528504627);
     expect($edition->imprint)->toBe('CrimeTime');
 })->group('integration');
+
+it('can map contributor roles to Onix codelist values correctly', function () {
+    $edition = app(EditionService::class)->getByGtin(9789528504627);
+
+    // Role that does not have an Onix codelist value should return null
+    expect($edition->contributors->where('role.name', 'Digital producer')->first()->role->onixCodelistValue)->toBeNull();
+
+    // Author
+    expect($edition->contributors->where('role.name', 'Author')->first()->role->onixCodelistValue)->toBe('A01');
+})->group('integration');
